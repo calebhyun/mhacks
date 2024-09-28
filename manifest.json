@@ -9,6 +9,12 @@
         "16": "search.png"
       }
     },
+    "web_accessible_resources": [
+      {
+        "resources": ["images/logo.png", "images/logoFull.png", "images/logomid.png"],
+        "matches": ["https://shop.lululemon.com/*"]
+      }
+    ],
     "content_scripts": [
       {
         "matches": ["https://shop.lululemon.com/shop/mybag/*"],
