@@ -40,7 +40,6 @@ function returnProducts() {
 }
 
 returnProducts();
-returnProducts();
 
 // Create a function to initialize the popup
 function initPopup() {
@@ -48,9 +47,9 @@ function initPopup() {
   const popupDiv = document.createElement('div');
   popupDiv.id = 'simplePopup';
   popupDiv.style.cssText = `
-    width: 400px;
-    height: 300px;
-    background-color: white;
+    width: 369px;
+    height: 634px;
+    background-color: #D9D9D9;
     border: 1px solid #ccc;
     position: fixed;
     top: 10px;
@@ -58,7 +57,7 @@ function initPopup() {
     z-index: 10000;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    text-align: left;
   `;
 
   // Add content to the popup, including the close button
@@ -73,13 +72,15 @@ function initPopup() {
   // Append the popup to the body
   document.body.appendChild(popupDiv);
 
-  // Create the collapsed icon button
-  const collapsedBtn = document.createElement('div');
-  collapsedBtn.id = 'collapsedIcon';
-  collapsedBtn.style.cssText = `
+    // Create the collapsed icon button
+    const collapsedBtn = document.createElement('div');
+    collapsedBtn.id = 'collapsedIcon';
+    collapsedBtn.style.cssText = `
     width: 40px;
     height: 40px;
     background-color: #007bff;
+    background-image: url('images/five_tips_forgreat_skin-removebg-preview.png');
+    background-size: cover; /* Ensures the image fits the button */
     color: white;
     border-radius: 50%;
     position: fixed;
@@ -91,11 +92,10 @@ function initPopup() {
     font-size: 24px;
     cursor: pointer;
     transition: right 0.5s;
-  `;
-  collapsedBtn.innerHTML = '☰'; // Hamburger icon
+    `;
 
-  // Append collapsed icon to the body
-  document.body.appendChild(collapsedBtn);
+    // Append collapsed icon to the body
+    document.body.appendChild(collapsedBtn);
 
   // Collapse the popup to the right
   function collapsePopup() {
