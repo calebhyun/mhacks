@@ -97,8 +97,10 @@ function initPopup() {
     const productTile = document.createElement('div');
     productTile.style.cssText = `
       width: 100%;
-      background-color: white;
+      height: 100px;
+      background-color: #A0B6A0;
       border: 1px solid #ccc;
+      border-radius: 15px;
       padding: 10px;
       display: flex;
       align-items: center;
@@ -111,8 +113,11 @@ function initPopup() {
         <img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover;">
       </div>
       <div style="flex: 3; padding-left: 10px;">
-        <a href="${product.link}" target="_blank" style="text-decoration: none; color: black;">
-          <p style="margin: 0; font-weight: bold;">${product.name}</p>
+        <a target="_blank" style="text-decoration: none; color: black;">
+          <p style="margin: 0; font-weight: bold;">Carbon Score: </p>
+        </a>
+        <a target="_blank" style="text-decoration: none; color: black; padding-top: 30px;">
+          <p style="margin: 0; font-weight: bold;">Water Score: </p>
         </a>
       </div>
     `;
