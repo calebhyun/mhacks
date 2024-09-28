@@ -65,7 +65,7 @@ function initPopup() {
   // Add close button and title to the popup
   popupDiv.innerHTML = `
     <div style="position: relative;">
-        <button id="closePopupBtn" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 18px; cursor: pointer;">&times;</button>
+        <button id="closePopupBtn" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 25px; cursor: pointer;">&times;</button>
         <h3 style="margin-left: 10px; margin-top: 10px">Your Cart</h3>
         <div id="productContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
     </div>
@@ -76,9 +76,9 @@ function initPopup() {
   logoImg.src = 'chrome-extension://maddnapocpaddbicgkofjjdlnpmbcadk/images/logoFull.png'; // Replace with the correct image path
   logoImg.alt = 'Logo';
   logoImg.style.cssText = `
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    position: relative;
+    bottom: -10px;
+    left: 120px;
     width: 80px;       /* Adjust the width as needed */
     height: auto;      /* Maintain aspect ratio */
     cursor: pointer;   /* Makes the logo clickable */
@@ -94,6 +94,7 @@ function initPopup() {
   // Populate product tiles inside the popup
   const productContainer = document.getElementById('productContainer');
   products.forEach(product => {
+    // Create the main screen product
     const productTile = document.createElement('div');
     productTile.style.cssText = `
       width: 100%;
@@ -107,7 +108,43 @@ function initPopup() {
       justify-content: space-between;
     `;
 
-    // Add product image, name, and link
+    // Create the hover overlay
+    const hoverOverlay = document.createElement('div');
+    hoverOverlay.className = 'hover-overlay';
+    hoverOverlay.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 10;
+    `;
+
+    // Add content to the hover overlay
+    hoverOverlay.innerHTML = `
+      <h3 style="margin: 0;">${product.name}</h3>
+      <a href="${product.link}" target="_blank" style="color: #fff; text-decoration: none;">View Product</a>
+    `;
+
+
+    // Add event listeners for showing and hiding the overlay
+    productTile.addEventListener('mouseenter', () => {
+      hoverOverlay.style.opacity = '1';
+    });
+
+    productTile.addEventListener('mouseleave', () => {
+      hoverOverlay.style.opacity = '0';
+    });
+
+    // Add all content to the main product screen
     productTile.innerHTML = `
       <div style="flex: 1;">
         <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
@@ -126,7 +163,7 @@ function initPopup() {
         </div>
       </div>
     `;
-
+    productTile.appendChild(hoverOverlay);
     productContainer.appendChild(productTile);
   });
 
