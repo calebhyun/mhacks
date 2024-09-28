@@ -5,14 +5,13 @@
     "description": "Extracts product links from the current page.",
     "permissions": ["activeTab", "scripting"],
     "action": {
-      "default_popup": "popup.html",
       "default_icon": {
         "16": "search.png"
       }
     },
     "content_scripts": [
       {
-        "matches": ["<all_urls>"],
+        "matches": ["https://shop.lululemon.com/shop/mybag/*"],
         "js": ["content.js"]
       }
     ]
