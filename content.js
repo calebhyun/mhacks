@@ -110,15 +110,20 @@ function initPopup() {
     // Add product image, name, and link
     productTile.innerHTML = `
       <div style="flex: 1;">
-        <img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover;">
+        <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
       </div>
-      <div style="flex: 3; padding-left: 10px;">
+      <div style="flex: 3; padding-left: 15px; height: 80px;">
         <a target="_blank" style="text-decoration: none; color: black;">
-          <p style="margin: 0; font-weight: bold;">Carbon Score: </p>
+          <p style="margin: 0; font-weight: bold;">${product.name} </p>
         </a>
-        <a target="_blank" style="text-decoration: none; color: black; padding-top: 30px;">
-          <p style="margin: 0; font-weight: bold;">Water Score: </p>
-        </a>
+        <div style="flex: 3; height: 40px;">
+          <a target="_blank" style="text-decoration: none; color: black;">
+            <p style="margin: 0;">Carbon Score: </p>
+          </a>
+          <a target="_blank" style="text-decoration: none; color: black;">
+            <p style="margin: 0;">Water Score: </p>
+          </a>
+        </div>
       </div>
     `;
 
