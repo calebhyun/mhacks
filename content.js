@@ -64,16 +64,16 @@ function initPopup() {
 
   // Add close button and title to the popup
   popupDiv.innerHTML = `
-    <div style="position: relative;">
+    <div style="position: relative; color:#3B3737">
         <button id="closePopupBtn" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 25px; cursor: pointer;">&times;</button>
-        <h3 style="margin-left: 10px; margin-top: 10px">Your Cart</h3>
+        <h3 style="margin-left: 10px; margin-top: 10px;">Your Cart</h3>
         <div id="productContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
     </div>
   `;
 
   // Set the alt text for accessibility
   const logoImg = document.createElement('img');
-  logoImg.src = 'chrome-extension://maddnapocpaddbicgkofjjdlnpmbcadk/images/logoFull.png'; // Replace with the correct image path
+  logoImg.src = 'chrome-extension://maddnapocpaddbicgkofjjdlnpmbcadk/images/logoFull.png';
   logoImg.alt = 'Logo';
   logoImg.style.cssText = `
     position: relative;
@@ -90,6 +90,31 @@ function initPopup() {
 
   // Append the popup to the body
   document.body.appendChild(popupDiv);
+
+  // Create the hover overlay container
+  const hoverOverlayContainer = document.createElement('div');
+  hoverOverlayContainer.id = 'hoverOverlayContainer';
+  hoverOverlayContainer.style.cssText = `
+    position: fixed;
+    top: 10px;
+    right: calc(10px + 369px); /* Position it to the left of popupDiv */
+    width: 300px;
+    height: 317px;
+    background: #D9D9D9;
+    color: #3B3737;
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10001;
+    overflow-y: auto;
+  `;
+
+  // Append the hover overlay container to the body
+  document.body.appendChild(hoverOverlayContainer);
 
   // Populate product tiles inside the popup
   const productContainer = document.getElementById('productContainer');
@@ -108,41 +133,36 @@ function initPopup() {
       justify-content: space-between;
     `;
 
-    // Create the hover overlay
-    const hoverOverlay = document.createElement('div');
-    hoverOverlay.className = 'hover-overlay';
-    hoverOverlay.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      z-index: 10;
-    `;
-
     // Add content to the hover overlay
-    hoverOverlay.innerHTML = `
-      <h3 style="margin: 0;">${product.name}</h3>
-      <a href="${product.link}" target="_blank" style="color: #fff; text-decoration: none;">View Product</a>
+    const hoverOverlay = `
+      <div style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 10px;">
+        ${product.name}
+      </div>
+      <div style="right: 100; left: 15; margin-bottom: 10px; font-size: 30px; color: #3B3737;">
+        Water Score:
+      </div>
+      <div style="margin-bottom: 10px; font-size: 30px; color: #3B3737;">
+        Carbon Score:
+      </div>
+      <div style="max-height: 150px; width: 90%; overflow-y: auto; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f0f0f0;">
+        <ul style="list-style-type: none; padding: 0;">
+          <li>Material 1</li>
+          <li>Material 2</li>
+          <li>Material 3</li>
+          <li>Material 4</li>
+          <li>Material 5</li>
+        </ul>
+      </div>
     `;
 
 
-    // Add event listeners for showing and hiding the overlay
+
+    // Show the hover overlay on mouse enter
     productTile.addEventListener('mouseenter', () => {
-      hoverOverlay.style.opacity = '1';
+      hoverOverlayContainer.innerHTML = hoverOverlay;
+      hoverOverlayContainer.style.display = 'flex';
     });
 
-    productTile.addEventListener('mouseleave', () => {
-      hoverOverlay.style.opacity = '0';
-    });
 
     // Add all content to the main product screen
     productTile.innerHTML = `
@@ -150,22 +170,23 @@ function initPopup() {
         <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
       </div>
       <div style="flex: 3; padding-left: 15px; height: 80px;">
-        <a target="_blank" style="text-decoration: none; color: black;">
+        <a target="_blank" style="text-decoration: none; color: #3B3737;">
           <p style="margin: 0; font-weight: bold;">${product.name} </p>
         </a>
         <div style="flex: 3; height: 40px;">
-          <a target="_blank" style="text-decoration: none; color: black;">
+          <a target="_blank" style="text-decoration: none; color: #3B3737;">
             <p style="margin: 0;">Carbon Score: </p>
           </a>
-          <a target="_blank" style="text-decoration: none; color: black;">
+          <a target="_blank" style="text-decoration: none; color: #3B3737;">
             <p style="margin: 0;">Water Score: </p>
           </a>
         </div>
       </div>
     `;
-    productTile.appendChild(hoverOverlay);
+
     productContainer.appendChild(productTile);
   });
+
 
   // Create the collapsed icon button
   const collapsedBtn = document.createElement('div');
@@ -194,6 +215,7 @@ function initPopup() {
 
   // Collapse the popup to the right
   function collapsePopup() {
+    hoverOverlayContainer.style.display = 'none';
     popupDiv.style.right = '-400px';
     collapsedBtn.style.right = '10px';
   }
