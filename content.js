@@ -1,4 +1,4 @@
-
+//import { scrapeLululemonProduct, cartItem } from "./calculate";
 
 // Create class to process each cart item
 class CartElt {
@@ -12,6 +12,16 @@ class CartElt {
     console.log(`Name: ${this.name}`);
     console.log(`Link: ${this.link}`);
     console.log(`Image: ${this.image}`);
+  }
+}
+
+// Make class
+class cartItem {
+  constructor(name, water, carbon, total) {
+      this.name = name;
+      this.water = water;
+      this.carbon = carbon;
+      this.total = total;
   }
 }
 
@@ -71,6 +81,7 @@ function initPopup() {
             <button id="suggestedProductsBtn" style="border-radius: 15px; font-size: 18px; background: none; margin-left: 10px; border: 2px solid #3B3737; font-weight: bold; color: #3B3737; cursor: pointer; padding: 5px;">Suggested Products</button>
         </div>
         <div id="productContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+        <div id="suggestedProductsContainer" style="display: none; flex-wrap: wrap; gap: 10px;">Suggested products will be displayed here.</div>
     </div>
   `;
 
@@ -122,6 +133,9 @@ function initPopup() {
   // Populate product tiles inside the popup
   const productContainer = document.getElementById('productContainer');
   products.forEach(product => {
+    
+    //productDetails = scrapeLululemonProduct(product.productUrl);
+
     // Create the main screen product
     const productTile = document.createElement('div');
     productTile.style.cssText = `
@@ -214,17 +228,13 @@ function initPopup() {
   `;
 
   // Create the suggestedProducts overlay container
-  const suggestedProducts = document.createElement('div');
+  const suggestedProducts = document.getElementById('suggestedProductsContainer');
   suggestedProducts.id = 'suggestedProductsOverlay';
   suggestedProducts.style.cssText = `
-    width: 369px;
-    height: 634px;
     background-color: #D9D9D9;
     border: 1px solid #ccc;
     border-radius: 15px;
-    position: fixed;
-    top: 10px;
-    right: 10px;
+    position: relative;
     z-index: 10000;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -232,8 +242,6 @@ function initPopup() {
     overflow-y: auto; /* Makes the popup scrollable */
   `;
   suggestedProducts.style.display = 'none';
-
-  popupDiv.appendChild(suggestedProducts);
 
   // Add event listeners after the buttons are added to the DOM
   document.getElementById('cartTitleBtn').addEventListener('click', () => {
@@ -243,6 +251,7 @@ function initPopup() {
 
   document.getElementById('suggestedProductsBtn').addEventListener('click', () => {
     productContainer.style.display = 'none';
+    hoverOverlayContainer.style.display = 'none';
     suggestedProducts.style.display= 'flex';
   });
   // Append collapsed icon to the body
