@@ -64,9 +64,12 @@ function initPopup() {
 
   // Add close button and title to the popup
   popupDiv.innerHTML = `
-    <div style="position: relative; color:#3B3737">
+    <div style="position: relative; color: #3B3737">
         <button id="closePopupBtn" style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 25px; cursor: pointer;">&times;</button>
-        <h3 style="margin-left: 10px; margin-top: 10px;">Your Cart</h3>
+        <div style="display: flex; align-items: center; margin: 10px;">
+            <button id="cartTitleBtn" style="border-radius: 15px; font-size: 18px; background: none; font-weight: bold; border: 2px solid #3B3737; color: #3B3737; cursor: pointer; padding: 5px;">Your Cart</button>
+            <button id="suggestedProductsBtn" style="border-radius: 15px; font-size: 18px; background: none; margin-left: 10px; border: 2px solid #3B3737; font-weight: bold; color: #3B3737; cursor: pointer; padding: 5px;">Suggested Products</button>
+        </div>
         <div id="productContainer" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
     </div>
   `;
@@ -210,6 +213,38 @@ function initPopup() {
     transition: right 0.5s;
   `;
 
+  // Create the suggestedProducts overlay container
+  const suggestedProducts = document.createElement('div');
+  suggestedProducts.id = 'suggestedProductsOverlay';
+  suggestedProducts.style.cssText = `
+    width: 369px;
+    height: 634px;
+    background-color: #D9D9D9;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 10000;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    overflow-y: auto; /* Makes the popup scrollable */
+  `;
+  suggestedProducts.style.display = 'none';
+
+  popupDiv.appendChild(suggestedProducts);
+
+  // Add event listeners after the buttons are added to the DOM
+  document.getElementById('cartTitleBtn').addEventListener('click', () => {
+    productContainer.style.display = 'flex';
+    suggestedProducts.style.display= 'none';
+  });
+
+  document.getElementById('suggestedProductsBtn').addEventListener('click', () => {
+    productContainer.style.display = 'none';
+    suggestedProducts.style.display= 'flex';
+  });
   // Append collapsed icon to the body
   document.body.appendChild(collapsedBtn);
 
