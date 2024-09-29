@@ -1,17 +1,36 @@
 //import { scrapeLululemonProduct, cartItem } from "./calculate";
 
+const clothesMap = new Map([
+  ["Swiftly Tech Short-Sleeve Polo Shirt Colour Tip", ["178.99", "7.92", "22", "Nylon, Polyester"]], // DONT USE 
+  ["Modal-Blend Turtleneck Tunic", ["241.92", "23.78", "66", "Recycled Polyester, Elastane, Modal"]],
+  ["Commission Long-Sleeve Shirt", ["8250.00", "3.30", "12", "Recycled Polyester, Elastane, Modal"]],
+  ["Softstreme Voluminous-Sleeve Pullover", ["87.50", "12.28", "72", "Recycled Polyester, Elastane, Modal"]],
+  ["Evolution Short-Sleeve Polo Shirt", ["87.50", "87.50", "34", "Recycled Polyester, Lyocell, Elastane"]],
+  ["Boxy Tote Bag 10L", ["440.00", "29.80", "42", "Recycled Nylon, Recycled Polyester"]],
+  ["Everywhere Belt Bag 1L", ["3920.00", "20.20", "29", "Recycled Nylon, Recycled Polyester"]]
+]);
+// below 30 red, below 60 yellow, below 100 green 
+
+
 // Create class to process each cart item
 class CartElt {
-  constructor(name, link, image) {
+  constructor(name, link, image, wScore, cScore, tScore, mats) {
     this.name = name;
     this.link = link;
     this.image = image;
+    this.waterScore = wScore
+    this.carbScore = cScore;
+    this.totalScore = tScore;
+    this.mats = mats;
   }
 
   display() {
     console.log(`Name: ${this.name}`);
     console.log(`Link: ${this.link}`);
     console.log(`Image: ${this.image}`);
+    console.log(`WS: ${this.waterScore}`);
+    console.log(`CS: ${this.carbScore}`);
+    console.log(`Total: ${this.totalScore}`);
   }
 }
 
@@ -40,8 +59,22 @@ function returnProducts() {
     const productUrl = "https://shop.lululemon.com" + item.productUrl;
     const productName = item.productName;
     const productImage = item.selectedSku.image;
+    values = []
+    try {
+      console.log(productName)
+      values = clothesMap.get(productName);
+    }
+    catch (ex) {
+      console.log("Error at 67: ", ex);
+    }
+    console.log(values)
+    const waterScore = values[0];
+    const carbScore = values[1];
+    const totalScore = values[2];
+    const mats = values[3];
 
-    const product = new CartElt(productName, productUrl, productImage);
+    const product = new CartElt(productName, productUrl, productImage, waterScore, carbScore, totalScore, mats);
+    product.display()
     //product.display();
     products.push(product);
 
@@ -133,15 +166,25 @@ function initPopup() {
   // Populate product tiles inside the popup
   const productContainer = document.getElementById('productContainer');
   products.forEach(product => {
-    
-    //productDetails = scrapeLululemonProduct(product.productUrl);
-
     // Create the main screen product
     const productTile = document.createElement('div');
+    color = ""
+    if (product.totalScore < 30) {
+      // red
+      color = "#D87171";
+    }
+    else if (product.totalScore < 60) {
+      // yellow
+      color = "#D4CC85";
+    }
+    else {
+      // green
+      color = "#A0B6A0";
+    }
     productTile.style.cssText = `
       width: 100%;
       height: 100px;
-      background-color: #A0B6A0;
+      background-color: ${color};
       border: 1px solid #ccc;
       border-radius: 15px;
       padding: 10px;
@@ -156,18 +199,14 @@ function initPopup() {
         ${product.name}
       </div>
       <div style="right: 100; left: 15; margin-bottom: 10px; font-size: 30px; color: #3B3737;">
-        Water Score:
+        Water (L):  ${product.waterScore}
       </div>
       <div style="margin-bottom: 10px; font-size: 30px; color: #3B3737;">
-        Carbon Score:
+        Carbon (Kg): ${product.carbScore}
       </div>
       <div style="max-height: 150px; width: 90%; overflow-y: auto; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f0f0f0;">
         <ul style="list-style-type: none; padding: 0;">
-          <li>Material 1</li>
-          <li>Material 2</li>
-          <li>Material 3</li>
-          <li>Material 4</li>
-          <li>Material 5</li>
+          ${product.mats}
         </ul>
       </div>
     `;
@@ -192,10 +231,13 @@ function initPopup() {
         </a>
         <div style="flex: 3; height: 40px;">
           <a target="_blank" style="text-decoration: none; color: #3B3737;">
-            <p style="margin: 0;">Carbon Score: </p>
+            <p style="margin: 0;">Water (L): ${product.waterScore}</p>
           </a>
           <a target="_blank" style="text-decoration: none; color: #3B3737;">
-            <p style="margin: 0;">Water Score: </p>
+            <p style="margin: 0;">Carbon (Kg): ${product.carbScore}</p>
+          </a>
+          <a target="_blank" style="text-decoration: none; color: #3B3737;">
+            <p style="margin: 0;">Total Score: ${product.totalScore}</p>
           </a>
         </div>
       </div>
